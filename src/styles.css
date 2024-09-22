@@ -1,0 +1,45 @@
+
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
+
+button.p-ripple.p-element.p-button.p-component.p-button-icon-only.p-button-rounded.p-button-outlined {
+   
+    width: 43px;
+    height: 43px;
+}
+
+svg.p-icon.p-sortable-column-icon {
+  
+    width: 13px;
+    height: 13px;
+}
+
+tr{
+   
+        font-size: 14px;
+        border-bottom-width: 1px;
+        border-color: #d7d1d1;
+    }
+td
+{
+    text-align: center;
+}
+
+    p-toolbar.p-element.mar {
+        display: block;
+        margin: 10px 20px;
+    }
+   
+   
+ .p-toolbar-group-left.p-toolbar-group-start.ng-star-inserted {
+        width: 70%;
+    }
+    p-menubarsub.p-element {
+        margin-right:80px;
+    }
+
+    span.p-element.p-dropdown-label.p-inputtext.ng-star-inserted.p-placeholder {
+        font-size: 14px;
+    }

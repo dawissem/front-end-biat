@@ -1,0 +1,311 @@
+<div>
+    <p-toast />
+    <p-toolbar styleClass="mb-4 gap-2" class="mar">
+        <ng-template pTemplate="left" style="width: 60%;">
+            <div>
+                <p-menubar [model]="items" />
+            </div>
+
+        </ng-template>
+
+        <ng-template pTemplate="right">
+
+
+        </ng-template>
+    </p-toolbar>
+
+
+    <div class="container-fluid ">
+        <div class="row">
+            <div class="col-12">
+                <div class="card0 my-4">
+
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <p-table #dt [value]="accounts" [rows]="4" [paginator]="true"
+                                [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+                                [tableStyle]="{ 'min-width': '75rem' }" [rowHover]="true" dataKey="id">
+                                <ng-template pTemplate="caption">
+                                    <div class="flex align-items-center justify-content-between">
+
+                                        <tr style="width: 100%;display:flex;border-bottom-width: 0px;">
+                                            <th style="width:33%">
+                                                <p-columnFilter type="text" field="accountTitle"
+                                                    placeholder="Search by Title" ariaLabel="Filter accountTitle"
+                                                    matchMode="contains" [showMenu]="false" />
+                                            </th>
+                                            <th style="width:33%">
+                                                <p-columnFilter field="category" matchMode="equals" [showMenu]="false">
+                                                    <ng-template pTemplate="filter" let-value
+                                                        let-filter="filterCallback">
+                                                        <p-dropdown [options]="categoryOptions"
+                                                            [(ngModel)]="selectedCategory"
+                                                            (onChange)="filter($event.value)"
+                                                            placeholder="Select Category" [showClear]="true">
+                                                            <ng-template let-option pTemplate="item">
+                                                                <p-tag [value]="option.label"
+                                                                    [severity]="getCategorySeverity(option.value)" />
+                                                            </ng-template>
+                                                        </p-dropdown>
+                                                    </ng-template>
+                                                </p-columnFilter>
+                                            </th>
+
+                                            <th style="width:33%">
+                                                <p-columnFilter field="currency.name" matchMode="equals"
+                                                    [showMenu]="false">
+                                                    <ng-template pTemplate="filter" let-value
+                                                        let-filter="filterCallback">
+                                                        <p-dropdown [options]="currencyOptions"
+                                                            [(ngModel)]="selectedCurrency"
+                                                            (onChange)="filter($event.value.name)"
+                                                            placeholder="Select Currency" [showClear]="true">
+                                                            <ng-template pTemplate="selectedItem">
+                                                                <div class="flex align-items-center gap-2"
+                                                                    *ngIf="selectedCurrency" style="display: flex;">
+
+                                                                    <div style="margin-left: 10px;">{{
+                                                                        selectedCurrency.id }}</div>
+                                                                </div>
+                                                            </ng-template>
+                                                            <ng-template let-option pTemplate="item">
+
+                                                                {{ option.id}}
+
+                                                            </ng-template>
+                                                        </p-dropdown>
+                                                    </ng-template>
+                                                </p-columnFilter>
+                                            </th>
+
+
+
+
+                                        </tr>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            pSortableColumn="accountTitle" style="width:11%">
+                                            Account id <p-sortIcon field="accountTitle" />
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            pSortableColumn="customer.shortName" style="width:11%">
+                                            Account title <p-sortIcon field="customer.shortName" />
+                                        </th>
+
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            pSortableColumn="category" style="width:9%">
+                                            Category <p-sortIcon field="category" />
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            pSortableColumn="openingDate" style="width:10%">
+                                            Opening Date <p-sortIcon field="openingDate" />
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            pSortableColumn="closureDate" style="width:10%">
+                                            Closure Date <p-sortIcon field="closureDate" />
+                                        </th>
+
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            pSortableColumn="workingBalance" style="width:12%">
+                                            Working Balance <p-sortIcon field="workingBalance" />
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            pSortableColumn="currency" style="width:8%">
+                                            Currency <p-sortIcon field="currency" />
+                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            pSortableColumn="customer.customer_ID" style="width:9%">
+                                            Customer Id <p-sortIcon field="customer.customer_ID" />
+                                        </th>
+
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                                            pSortableColumn="accountOfficer.name" style="width:9%">
+                                            Agence <p-sortIcon field="accountOfficer.name" />
+                                        </th>
+
+                                        <th></th>
+                                    </tr>
+
+                                </ng-template>
+                                <ng-template pTemplate="body" let-account>
+                                    <tr>
+
+                                        <td>
+                                            {{ account.customer?.customer_ID }} <!-- ye5ouli houni customer_id ili hiya type number-->
+                                           <!--  {{ account.accountTitle }} -->
+                                        </td>
+                                        <td>
+                                            {{ account.customer?.shortName }}
+                                        </td>
+                                        <td>
+                                            <p-tag [value]="account.category"
+                                                [severity]="getCategorySeverity(account.category)" />
+                                        </td>
+
+                                        <td>
+                                            <span class="p-column-title">Date</span>
+                                            {{ account.openingDate | date : 'MM/dd/yyyy' }}
+                                        </td>
+                                        <td>
+                                            <span class="p-column-title">Date</span>
+                                            {{ account.closureDate | date : 'MM/dd/yyyy' }}
+                                        </td>
+
+                                        <td>
+                                            {{ account.workingBalance }}
+                                        </td>
+                                        <td>
+                                            {{ account.currency?.id }}
+                                        </td>
+
+
+                                        <td>
+                                            {{ account.customer?.customer_ID }}
+                                        </td>
+
+                                        <td>
+                                            {{ account.accountOfficer?.name }}
+                                        </td>
+                                        <td style="display: flex;" *ngIf="agencyId=== account.accountOfficer?.id">
+                                            <p-button icon="pi pi-pencil" class="btn0" [rounded]="true"
+                                                [outlined]="true" severity="success" (onClick)="editAccount(account)" />
+
+                                            <p-button icon="pi pi-trash" class="btn0" severity="danger" [rounded]="true"
+                                                [outlined]="true" (onClick)="deleteAccount(account)" />
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+                            </p-table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <p-dialog [(visible)]="Dialog" [style]="{ width: '450px' }" header="Modfify  Account" [modal]="true"
+            [styleClass]="'p-fluid'" [closable]="true" (onHide)="hideDialog()">
+
+            <ng-template pTemplate="content">
+                <div class="p-fluid">
+                    
+                    <!-- Account Title -->
+                <!--     <div class="field">
+                        <label for="accountTitle">Account Title</label>
+                        <input type="text" pInputText id="accountTitle" [(ngModel)]="account.accountTitle" required
+                            autofocus />
+                        <small class="p-error" *ngIf="submitted && !account.accountTitle">
+                            Account Title is required.
+                        </small>
+                    </div> -->
+
+                    <!-- Account Title -->       <!--   {{ account.customer?.shortName }}          test-->  
+                    <div class="field">
+                        <label for="accountTitle">Account Title</label>
+                        <input type="text" pInputText id="account.customer?.shortName" [(ngModel)]="account.customer.shortName" required
+                            autofocus />
+                        <small class="p-error" *ngIf="submitted && account.customer?.shortName ">
+                            Account Title is required.
+                        </small>
+                    </div>
+
+                    <!-- Currency Dropdown -->
+                    <!-- <div class="field">
+                <label for="currency">Currency</label>
+                <p-dropdown 
+                    id="currency" 
+                    [options]="currencyOptions" 
+                    [(ngModel)]="account.currency" 
+                    placeholder="Select a currency" 
+                    [showClear]="true">
+                    <ng-template pTemplate="selectedItem">
+                        <div class="flex align-items-center gap-2" *ngIf="account.currency" style="display: flex;">
+                        
+                            <div style="margin-left: 10px;">{{ account.currency.name }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-currency pTemplate="item">
+                        <div class="flex align-items-center gap-2" style="display: flex;">
+                           
+                            <div style="margin-left: 10px;">{{ currency.name }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+                <small class="p-error" *ngIf="submitted && !account.currency">
+                    Currency is required.
+                </small>
+            </div> -->
+
+                    <!-- Category Dropdown -->
+                    <!-- <div class="field">
+                <label for="category">Category</label>
+                <p-dropdown 
+                    id="category" 
+                    [options]="categoryOptions" 
+                    [(ngModel)]="account.category" 
+                    placeholder="Select a category" 
+                    [showClear]="true"/>
+                <small class="p-error" *ngIf="submitted && !account.category">
+                    Category is required.
+                </small>
+            </div> -->
+
+                    <!-- Working Balance -->
+                    <!-- <div class="field">
+                <label for="workingBalance">Working Balance</label>
+                <input 
+                    type="number" 
+                    pInputText 
+                    id="workingBalance" 
+                    [(ngModel)]="account.workingBalance" />
+                <small class="p-error" *ngIf="submitted && !account.workingBalance">
+                    Working Balance is required.
+                </small>
+            </div> -->
+
+                    <!-- Opening Date
+            <div class="field">
+                <label for="openingDate">Opening Date</label>
+                <p-calendar 
+                    id="openingDate" 
+                    [(ngModel)]="account.openingDate" 
+                    [showIcon]="true" 
+                    placeholder="Select a date"/>
+                <small class="p-error" *ngIf="submitted && !account.openingDate">
+                    Opening Date is required.
+                </small>
+            </div>
+
+            Closure Date -->
+                    <!-- <div class="field">
+                <label for="closureDate">Closure Date</label>
+                <p-calendar 
+                    id="closureDate" 
+                    [(ngModel)]="account.closureDate" 
+                    [showIcon]="true" 
+                    placeholder="Select a date"/>
+                <small class="p-error" *ngIf="submitted && !account.closureDate">
+                    Closure Date is required.
+                </small>
+            </div> -->
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <p-button label="Cancel" icon="pi pi-times" [text]="true" (onClick)="hideDialog()" />
+                <p-button label="Save" icon="pi pi-check" [text]="true" (onClick)="updateAccount()" />
+            </ng-template>
+        </p-dialog>
+
+
+
+        <p-confirmDialog [style]="{ width: '450px' }" />
+    </div>

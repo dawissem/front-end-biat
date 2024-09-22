@@ -1,0 +1,602 @@
+<div >
+    <p-toast />
+    <p-toolbar styleClass="mb-4 gap-2" class="mar">
+        <ng-template pTemplate="left" style="width: 60%;">
+            <div  >
+                <p-menubar [model]="items" />
+            </div>
+           
+        </ng-template>
+
+        <ng-template pTemplate="right">
+            
+            <p-button
+                severity="success" 
+                label=" Add New Customer" 
+                icon="pi pi-plus" 
+                class="mr-2" 
+                (onClick)="openNew()" 
+                class="fs"/>
+        </ng-template>
+    </p-toolbar>
+
+    
+    <div class="container-fluid ">
+        <div class="row">
+          <div class="col-12">
+            <div class="card0 my-4">
+              
+              <div class="card-body px-0 pb-2">
+                <div class="table-responsive p-0">
+                    <p-table
+        #dt
+        [value]="customers"
+        [rows]="4"
+        [paginator]="true"
+        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        [rowHover]="true"
+        dataKey="id"
+    >
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+                
+                <tr style="width: 100%;">
+                    <th style="width:20%">
+                        <p-columnFilter 
+                            type="text" 
+                            field="shortName" 
+                           
+                            placeholder="Search by name" 
+                            ariaLabel="Filter Name"
+                              matchMode="contains"
+                            [showMenu]="false"
+                             />
+                    </th>
+                    <th style="width:20%">
+                        <p-columnFilter field="customerType" matchMode="equals" [showMenu]="false">
+                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                <p-dropdown 
+                                    
+                                    [options]="customerTypeOptions"
+                                    [(ngModel)]="selectedCustomerType"
+                                    (onChange)="filter($event.value)" 
+                                    placeholder="Select Type" 
+                                    [showClear]="true">
+                                        <ng-template let-option pTemplate="item">
+                                            <p-tag 
+                                                [value]="option.label" 
+                                                [severity]="getTypeSeverity(option.value)" />
+                                        </ng-template>
+                                </p-dropdown>
+                            </ng-template>
+                        </p-columnFilter>
+
+                    </th>
+                    
+                    <th style="width:20%">
+                        <p-columnFilter field="gender" matchMode="equals" [showMenu]="false">
+                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                <p-dropdown 
+                                    
+                                    [options]="genderOptions"
+                                    [(ngModel)]="selectedgender"
+                                    (onChange)="filter($event.value)" 
+                                    placeholder="Select Gender" 
+                                    [showClear]="true">
+                                        <ng-template let-option pTemplate="item">
+                                            <p-tag 
+                                                [value]="option.label" 
+                                                [severity]="getGenderSeverity(option.value)" />
+                                        </ng-template>
+                                </p-dropdown>
+                            </ng-template>
+                        </p-columnFilter>
+                    </th>
+                    
+
+                    <th style="width:20%">
+                        <p-columnFilter field="nationality.name" matchMode="equals" [showMenu]="false">
+                            <ng-template pTemplate="filter" let-filter="filterCallback">
+                                <p-dropdown 
+                                [options]="nationalityOptions"
+                                [(ngModel)]="selectedNationality" 
+                                (onChange)="filter($event.value.name);log($event.value)" 
+                                placeholder="Select Country" 
+                                [showClear]="true">
+                                <ng-template pTemplate="selectedItem">
+                                    <div class="flex align-items-center gap-2" *ngIf="selectedNationality" style="display: flex;">
+                                        <img 
+                                            src="https://flagcdn.com/w320/{{ selectedNationality.id | lowercase }}.png"
+                                            [class]="'flag flag-' + selectedNationality.id.toLowerCase()"
+                                            style="width: 18px" />
+                                        <div style="margin-left: 10px;">{{ selectedNationality.name }}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="item" let-option>
+                                    <div style="display: flex; align-items: center;">
+                                        <img 
+                                            src="https://flagcdn.com/w320/{{ option.id | lowercase }}.png"
+                                            [class]="'flag flag-' + option.id.toLowerCase()"
+                                            style="width: 20px; height: 17px; margin-right: 10px" />
+                                        <span>{{ option.name }}</span>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                            </ng-template>
+                        </p-columnFilter>
+                    </th>
+                    
+
+                    
+                    <th style="width:23%">
+                        <p-columnFilter 
+                            type="text" 
+                            field="legalId" 
+                            placeholder="Search by legalId" 
+                            ariaLabel="Filter legalId"
+                              matchMode="contains"
+                            [showMenu]="false"
+                             />
+                    </th>
+                   
+                    
+                </tr>   
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            
+            <tr>
+                
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="shortName" style="width:7%" >
+                    Name <p-sortIcon field="shortName" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="customerType" style="width:7%" >
+                    Type <p-sortIcon field="customerType" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="mail" style="width:7%" >
+                    Mail <p-sortIcon field="mail" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="tel" style="width:7%" >
+                    Phone <p-sortIcon field="tel" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="gender" style="width:7%" >
+                    Gender <p-sortIcon field="gender" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="nationality.name"style="width:7%" >
+                    Country <p-sortIcon field="nationality.name" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="address"style="width:7%" >
+                    Adddress <p-sortIcon field="address" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="postCode" style="width:7%" >
+                    Post Code <p-sortIcon field="postCode" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="dateBirthCreation" style="width:7%" >
+                    dateBirthCreation <p-sortIcon field="dateBirthCreation" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="legalDocName" style="width:7%">
+                    legalDocName <p-sortIcon field="legalDocName" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="legalId" style="width:7%" >
+                    legalId <p-sortIcon field="legalId" />
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" pSortableColumn="agence.name" style="width:7%">
+                    Agence <p-sortIcon field="agence.name" />
+                </th>
+                
+                <th></th>
+            </tr>
+            
+        </ng-template>
+        <ng-template pTemplate="body" let-customer>
+            <tr>
+               
+                <td>
+                    {{ customer.shortName }}
+                </td>
+                <td>
+                    <p-tag 
+                       [value]="customer.customerType === 'PP' ? 'Physique' : customer.customerType === 'PM' ? 'Moral' : 'unknown'"
+                        [severity]="getTypeSeverity(customer.customerType)" />
+                </td>
+                <td style="min-width:70%">
+                    {{ customer.mail }}
+                </td>
+                <td>
+                    {{ customer.tel }}
+                </td>
+                
+                <td >
+                    <p-tag *ngIf="customer.customerType==='PP'"
+                        [value]="customer.gender" 
+                        [severity]="getGenderSeverity(customer.gender)" />
+                </td>
+                <td >
+                    <div style="display: flex;">
+                        <img src="https://flagcdn.com/w320/{{ customer.nationality.id | lowercase }}.png" 
+                    [class]="'flag flag-' + customer.nationality.id"
+                    style="width: 20px; height: 17px; margin-right: 10px" />
+                    <span class="ml-1 vertical-align-middle">{{ customer.nationality?.name }}</span>
+                    </div>
+                    
+                </td>
+                <td>
+                    {{ customer.address }}
+                </td>
+                <td>
+                    {{ customer.postCode }}
+                </td>
+                <td>
+                    <span class="p-column-title">Date</span>
+                    {{ customer.dateBirthCreation | date : 'MM/dd/yyyy' }}
+                </td>
+                <td>
+                    <p-tag 
+                        [value]="customer.legalDocName" 
+                        [severity]="getlegalDocSeverity(customer.legalDocName)" />
+                </td>
+                <td>
+                    {{ customer.legalId }}
+                </td>
+                <td>
+                    {{ customer.agence?.name }}
+                </td>
+                <td style="display: flex;">
+                    <p-button 
+                        icon="pi pi-pencil" 
+                        class="btn0" 
+                        [rounded]="true" 
+                        [outlined]="true" 
+                        severity="success" 
+                        (onClick)="editCustomer(customer)" 
+                       />
+                       <p-button 
+                        icon="pi pi-user-plus" 
+                        class="btn0" 
+                        [rounded]="true" 
+                        [outlined]="true" 
+                        severity="info" 
+                        (onClick)="openAccountDialog(customer)" 
+                       />
+                    <p-button 
+                        icon="pi pi-trash" 
+                        class="btn0" 
+                        severity="danger" 
+                        [rounded]="true" 
+                        [outlined]="true" 
+                        (onClick)="deleteCustomer(customer)" />
+                </td>
+            </tr>
+        </ng-template>
+        
+    </p-table>
+
+
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <p-dialog 
+      [(visible)]="Dialog" 
+      [style]="{ width: '450px' }" 
+      header="Add New Customer" 
+      [modal]="true" 
+      [styleClass]="'p-fluid'"
+      [closable]="true"
+      (onHide)="hideDialog()">
+     
+      <ng-template pTemplate="content">
+          <div class="p-fluid">
+              <div class="field">
+                  <label for="shortName">Name</label>
+                  <input 
+                      type="text" 
+                      pInputText 
+                      id="shortName" 
+                      [(ngModel)]="customer.shortName" 
+                      required 
+                      autofocus />
+                  <small class="p-error" *ngIf="submitted && !customer.shortName">
+                      Name is required.
+                  </small>
+              </div>
+  
+              <div class="field">
+                  <label for="customerType">Customer Type</label>
+                  <p-dropdown 
+                      id="customerType" 
+                      [options]="customerTypeOptions" 
+                      [(ngModel)]="customer.customerType" 
+                      placeholder="Select a type" 
+                      [showClear]="true"/>
+              </div>
+              <small class="p-error" *ngIf="submitted && !customer.customerType">
+                Type is required.
+            </small>
+  
+              <div class="field" *ngIf="customer.customerType==='PP'">
+                  <label for="gender">Gender</label>
+                  <p-dropdown 
+                      id="gender" 
+                      [options]="genderOptions" 
+                      [(ngModel)]="customer.gender" 
+                      placeholder="Select a gender" 
+                      [showClear]="true"/>
+              </div>
+              <small class="p-error" *ngIf="submitted && !customer.gender && customer.customerType==='PP' ">
+                Gender is required.
+            </small>
+              
+              <div class="field">
+                  <label for="dateBirthCreation">Date of Birth</label>
+                  <p-calendar 
+                      id="dateBirthCreation" 
+                      [(ngModel)]="customer.dateBirthCreation" 
+                      [showIcon]="true" 
+                      placeholder="Select a date"/>
+              </div>
+               <small class="p-error" *ngIf="submitted && !customer.dateBirthCreation">
+                Date is required.
+            </small>
+              <div class="field">
+                <label for="tel">Phone</label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    id="tel" 
+                    [(ngModel)]="customer.tel" />
+            </div>
+             <small class="p-error" *ngIf="submitted && !customer.tel">
+                Phone is required.
+            </small>
+
+            <div class="field">
+                <label for="mail">Email</label>
+                <input 
+                    type="email" 
+                    pInputText 
+                    id="mail" 
+                    [(ngModel)]="customer.mail" />
+            </div>
+             <small class="p-error" *ngIf="submitted && !customer.mail">
+                Email is required.
+            </small>
+            <div class="field">
+                <label for="nationality">Nationality</label>
+                
+
+
+                <p-dropdown 
+                    [options]="nationalityOptions" 
+                    [(ngModel)]="customer.nationality"
+                    [showClear]="true"
+                    placeholder="Select a nationality">
+                        <ng-template pTemplate="selectedItem">
+                            <div class="flex align-items-center gap-2" *ngIf="customer.nationality" style="display: flex;">
+                                <img 
+                                    src="https://flagcdn.com/w320/{{ customer.nationality.id | lowercase }}.png"
+                                    [class]="'flag flag-' + customer.nationality.id.toLowerCase()"
+                                    style="width: 18px" />
+                                <div style="margin: left 10px; ;">{{ customer.nationality.name }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-country pTemplate="item">
+                            <div class="flex align-items-center gap-2" style="display: flex;">
+                                <img 
+                                    src="https://flagcdn.com/w320/{{ country.id | lowercase }}.png"
+                                    [class]="'flag flag-' + country.id.toLowerCase()" 
+                                    style="width: 18px" />
+                                <div style="margin: left 10px; ;">{{ country.name }}</div>
+                            </div>
+                        </ng-template>
+                </p-dropdown>
+                    
+            </div>
+             <small class="p-error" *ngIf="submitted && !customer.nationality">
+                Nationality is required.
+            </small>
+              <div class="field">
+                  <label for="address">Address</label>
+                  <input 
+                      type="text" 
+                      pInputText 
+                      id="address" 
+                      [(ngModel)]="customer.address" />
+              </div>
+               <small class="p-error" *ngIf="submitted && !customer.address">
+                Address is required.
+            </small>
+  
+              <div class="field">
+                  <label for="postCode">Post Code</label>
+                  <input 
+                      type="number" 
+                      pInputText 
+                      id="postCode" 
+                      [(ngModel)]="customer.postCode" />
+              </div>
+               <small class="p-error" *ngIf="submitted && !customer.postCode">
+                Post Code is required.
+            </small>
+  
+              <div class="field">
+                  <label for="legalDocName">Legal Document</label>
+                  <p-dropdown 
+                      id="legalDocName" 
+                      [options]="legalDocOptions" 
+                      [(ngModel)]="customer.legalDocName" 
+                      placeholder="Select a document" 
+                      [showClear]="true"/>
+              </div>
+               <small class="p-error" *ngIf="submitted && !customer.legalDocName">
+                Legal Document is required.
+            </small>
+  
+              <div class="field">
+                  <label for="legalId">Legal ID</label>
+                  <input 
+                      type="text" 
+                      pInputText 
+                      id="legalId" 
+                      [(ngModel)]="customer.legalId" />
+              </div>
+               <small class="p-error" *ngIf="submitted && !customer.legalId">
+                Legal ID is required.
+            </small>
+  
+              
+  
+              
+          </div>
+      </ng-template>
+  
+      <ng-template pTemplate="footer">
+          <p-button 
+              label="Cancel" 
+              icon="pi pi-times" 
+              [text]="true" 
+              (onClick)="hideDialog()" />
+          <p-button
+              label="Save" 
+              icon="pi pi-check" 
+              [text]="true" 
+               (onClick)="saveCustomer()"
+               />
+      </ng-template>
+  </p-dialog>
+
+  <p-dialog 
+    [(visible)]="dialogAccount" 
+    [style]="{ width: '450px' }" 
+    header="Add New Account" 
+    [modal]="true" 
+    [styleClass]="'p-fluid'"
+    [closable]="true"
+    (onHide)="hideDialog()">
+
+    <ng-template pTemplate="content">
+        <div class="p-fluid">
+            <!-- Account Title -->
+            <div class="field">
+                <label for="accountTitle">Account Title</label>
+                <input 
+                    type="text" 
+                    pInputText 
+                    id="accountTitle" 
+                    [(ngModel)]="account.accountTitle" 
+                    required 
+                    autofocus />
+                <small class="p-error" *ngIf="submitted && !account.accountTitle">
+                    Account Title is required.
+                </small>
+            </div>
+
+            <!-- Currency Dropdown -->
+            <div class="field">
+                <label for="currency">Currency</label>
+                <p-dropdown 
+                    id="currency" 
+                    [options]="currencyOptions" 
+                    [(ngModel)]="account.currency" 
+                    placeholder="Select a currency" 
+                    [showClear]="true">
+                    <ng-template pTemplate="selectedItem">
+                        <div class="flex align-items-center gap-2" *ngIf="account.currency" style="display: flex;">
+                        
+                            <div style="margin-left: 10px;">{{ account.currency.name }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-currency pTemplate="item">
+                        <div class="flex align-items-center gap-2" style="display: flex;">
+                           
+                            <div style="margin-left: 10px;">{{ currency.name }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+                <small class="p-error" *ngIf="submitted && !account.currency">
+                    Currency is required.
+                </small>
+            </div>
+
+            <!-- Category Dropdown -->
+            <div class="field">
+                <label for="category">Category</label>
+                <p-dropdown 
+                    id="category" 
+                    [options]="categoryOptions" 
+                    [(ngModel)]="account.category" 
+                    placeholder="Select a category" 
+                    [showClear]="true"/>
+                <small class="p-error" *ngIf="submitted && !account.category">
+                    Category is required.
+                </small>
+            </div>
+
+            <!-- Working Balance -->
+            <div class="field">
+                <label for="workingBalance">Working Balance</label>
+                <input 
+                    type="number" 
+                    pInputText 
+                    id="workingBalance" 
+                    [(ngModel)]="account.workingBalance" />
+                <small class="p-error" *ngIf="submitted && !account.workingBalance">
+                    Working Balance is required.
+                </small>
+            </div>
+
+            <!-- Opening Date -->
+            <div class="field">
+                <label for="openingDate">Opening Date</label>
+                <p-calendar 
+                    id="openingDate" 
+                    [(ngModel)]="account.openingDate" 
+                    [showIcon]="true" 
+                    placeholder="Select a date"/>
+                <small class="p-error" *ngIf="submitted && !account.openingDate">
+                    Opening Date is required.
+                </small>
+            </div>
+
+            <!-- Closure Date -->
+            <div class="field">
+                <label for="closureDate">Closure Date</label>
+                <p-calendar 
+                    id="closureDate" 
+                    [(ngModel)]="account.closureDate" 
+                    [showIcon]="true" 
+                    placeholder="Select a date"/>
+                <small class="p-error" *ngIf="submitted && !account.closureDate">
+                    Closure Date is required.
+                </small>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button 
+            label="Cancel" 
+            icon="pi pi-times" 
+            [text]="true" 
+            (onClick)="hideDialog()" />
+        <p-button
+            label="Save" 
+            icon="pi pi-check" 
+            [text]="true" 
+            (onClick)="saveAccount()"
+            />
+    </ng-template>
+</p-dialog>
+
+
+
+  
+  
+
+    <p-confirmDialog [style]="{ width: '450px' }" />
+</div>

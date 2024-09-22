@@ -1,0 +1,64 @@
+
+
+<html lang="en">
+  <head>
+  	<title>Login 01</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	
+	
+	<link rel="stylesheet" href="/assets/login.css">
+	</head>
+	<body>
+		
+		
+
+	<section class="ftco-section">
+		<div class="container">
+			
+			<div class="row justify-content-center">
+				<div class="col-md-7 col-lg-5">
+					<div class="login-wrap p-4 p-md-5">
+		      	<div class="icon d-flex align-items-center justify-content-center">
+                    <i class="pi pi-user" style="color: #fff ; font-size: 25px ;"></i>
+
+		      	</div>
+		      	<h3 class="text-center mb-4">Log In</h3>
+						<form action="#" class="login-form">
+		      		<div class="form-group">
+		      			<input type="text" class="form-control rounded-left" name="Matricule" [(ngModel)]="request.matricule" placeholder="Matricule" required>
+                          <small *ngIf="submitted && !request.matricule" class="text-danger">
+                            Matricule is required.
+                        </small>
+                    </div>
+	            <div class="form-group ">
+	              <input type="password" class="form-control rounded-left" name="password" [(ngModel)]="request.password" placeholder="Password" required>
+                  <small *ngIf="submitted && !request.password" class="text-danger">
+                    Password is required.
+                </small>
+                </div>
+	            <div class="form-group">
+	            	<button type="submit" class="form-control btn btn-primary rounded submit px-3" (click)="submit()">Login</button>
+	            </div>
+	            <div class="form-group d-md-flex">
+	            	<div class="w-50">
+	            		
+								</div>
+								<div class="w-50 text-md-right">
+									<a href="#">Forgot Password</a>
+								</div>
+	            </div>
+	          </form>
+	        </div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+    <p-toast></p-toast>
+
+	</body>
+	
+</html>
+

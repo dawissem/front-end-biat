@@ -1,0 +1,43 @@
+.pink {
+    background-color: rgb(156, 14, 75); 
+    color: white; 
+}
+.btn0 {
+    font-size: 0.25rem; /* Smaller font size */
+    padding: 0.25rem 0.25rem ; /* Adjust padding */
+}
+
+.filter-row th {
+    padding: 0; /* Remove default padding */
+    text-align: center; /* Center align text or adjust as needed */
+}
+
+.filter-row th input {
+    width: 100%; /* Make filter inputs fill the th element */
+}
+.card0
+{
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+    margin: 10px;
+}
+.mar
+{
+    margin:0px 10px;
+}
+.fs
+{
+    font-size: 14px;
+}
+.field {
+    margin-bottom: 1rem;
+}
+
+.p-grid .p-col {
+    padding: 0.5rem;
+}
